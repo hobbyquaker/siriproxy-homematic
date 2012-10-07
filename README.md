@@ -1,5 +1,5 @@
 Siriproxy Plugin Homematic Version 0.1
-10'2012 basti, hobbyquaker@gmail.com
+10'2012 basti, hobbyquaker gmail com
 
 IP-Adresse der CCU in Zeile 31 anpassen.
 
