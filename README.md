@@ -10,6 +10,14 @@ das Plugin auch auf die Worte "Rollladen", "Markise" und "Steckdose".
 Zentralen-Programme lassen sich über den Befehl "Automatik" gefolgt von Namen des Programms starten.
 
 ###Installation
+
+Getestet mit TLP 0.11.3
+
+Benötigt xmlsimple:
+```bash
+gem install xml-simple
+```
+
 in config.yml eintragen, Pfad und IP Adresse der CCU anpassen!
 
 ```ruby
