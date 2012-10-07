@@ -10,17 +10,12 @@ das Plugin auch auf die Worte "Rollladen", "Markise" und "Steckdose".
 Zentralen-Programme lassen sich über den Befehl "Automatik" gefolgt von Namen des Programms starten.
 
 ###Befehle
-**Siri:** Licht *(Bezeichner)* *(0-100)* Prozent
+**Siri:** Licht *(Bezeichner)* *(0-100)* Prozent     
+**Siri:** Licht *(Bezeichner)* an     
+**Siri:** Licht *(Bezeichner)* aus     
+Steuert Schalt-, Dimm- und Rollladen-Aktoren     
 
-**Siri:** Licht *(Bezeichner)* an
-
-**Siri:** Licht *(Bezeichner)* aus
-
-Steuert Schalt-, Dimm- und Rollladen-Aktoren
-
-
-**Siri:** Automatik *(Bezeichner)*
-
+**Siri:** Automatik *(Bezeichner)*    
 Startet ein Zentralenprogramm
 
 
