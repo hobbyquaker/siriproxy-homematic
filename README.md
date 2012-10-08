@@ -1,5 +1,7 @@
 ###Siriproxy Homematic Plugin Version 0.1
 
+Ein kleines Demo-Video: http://www.youtube.com/watch?v=PRAo6GPoI2Y
+
 Das Plugin liest beim ersten Aufruf, nach dem (Neu-)start des Siriproxy, die verfügbaren
 Schalt-, Dimm- und Rollladenaktoren sowie Zentralenprogramme via XMLAPI aus der 
 Homematic CCU aus. 
