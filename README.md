@@ -1,4 +1,4 @@
-###Siriproxy Homematic Plugin Version 0.1
+###Siriproxy Homematic Plugin Version 0.2
 
 Ein kleines Demo-Video: http://www.youtube.com/watch?v=PRAo6GPoI2Y
 
