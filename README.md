@@ -2,36 +2,37 @@
 
 Ein kleines Demo-Video: http://www.youtube.com/watch?v=PRAo6GPoI2Y
 
-Das Plugin liest beim ersten Aufruf, nach dem (Neu-)start des Siriproxy, die verfügbaren
-Schalt-, Dimm- und Rollladenaktoren sowie Zentralenprogramme via XMLAPI aus der 
-Homematic CCU aus. 
-
+Mit diesem Plugin können Homematic Dimm-, Schalt-, und Rollladen-Aktoren über Siri gesteuert werden. Auch Programme starten und Systemvariablen lesen ist möglich. Das liest die Bezeichner der Kanäle, Variablen und Programme aus der CCU aus, daher muss ausser der CCU-IP keine weitere Konfiguration vorgenommen werden. Siehe auch diesen Forums-Thread: http://homematic-forum.de/forum/viewtopic.php?f=31&t=10237
 
 ###Befehle
-**Siri:** Licht *(Bezeichner)* *(0-100)* Prozent     
-**Siri:** Licht *(Bezeichner)* an     
-**Siri:** Licht *(Bezeichner)* aus     
-Steuert Schalt-, Dimm- und Rollladen-Aktoren     
-Statt dem Befehl "Licht" kann auch "Steckdose", "Rollladen" und "Markise" verwendet werden. Dies hat allerdings keine Auswirkung auf den gesteuerten Kanal, dieser wird nur über den Bezeichner gesucht.
+## Aktoren steuern
+**Siri:** [Licht,Lampe,Beleuchtung,Steckdose,Stromkreis] *(Bezeichner)* *(0-100)* Prozent     
+**Siri:** [Licht,Lampe,Beleuchtung,Steckdose,Stromkreis] *(Bezeichner)* [an|aus|anschalten|ausschalten|abschalten] 
+**Siri:** [Rolladen] *(Bezeichner)* *(0-100)* Prozent  
+**Siri:** [Rolladen] *(Bezeichner)* [auf|zu|öffnen|schließen]   
+## Variablen abfragen
+**Siri:** Status *(Bezeichner)*
+## Programme starten
+**Siri:** Automatik *(Bezeich
 
-**Siri:** Automatik *(Bezeichner)*    
-Startet ein Zentralenprogramm
+
+### Vorraussetzungen
+##Homematic CCU
+Auf der CCU muss die Firmware-Erweiterung XML-API eingerichtet sein. Damit Variablen auch mit den Text-Bezeichnern aus ihren Wertelisten gelesen und gesetzt werden können ist eine modifizierte Version der XML-API notwendig: https://github.com/hobbyquaker/hq-xmlapi
+##Siriproxy
+Dieses Software benötigt einen fertig eingerichteten, funktionierenden Siri-Proxy! Getestet mit Three Little Pigs Siri Proxy 0.11.3. 
 
 
-###Installation
+#Einrichtung des Plugins
+Verzeichnis siriproxy-homematic in das plugins Verzeichnis des Siriproxy kopieren
 
-Getestet mit TLP 0.11.3
-
-Benötigt xmlsimple:
-```bash
-gem install xml-simple
-```
-
-in config.yml eintragen, Pfad und IP Adresse der CCU anpassen!
+in config.yml des Siriproxy eintragen, Pfad und IP Adresse der CCU anpassen!
 
 ```ruby
     - name: 'Homematic'
       path: '/path/to/plugins/siriproxy-homematic'
       ccu_ip: '172.16.23.3'
 ```
+
+Siriproxy beenden, lokales Update durchführen: ```siriproxy update .```, Siriproxy neu starten.
 

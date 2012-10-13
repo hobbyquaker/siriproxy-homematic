@@ -21,19 +21,19 @@ class SiriProxy::Plugin::Homematic < SiriProxy::Plugin
       $hm_channels = Hash.new
       $hm_programs = Hash.new
       $hm_sysvars = Hash.new
+      $hm_valuelist = Hash.new
       hm_get_config
     end
   end
 
   # Schalt-, Dimm-, und Rollladen-Aktoren steuern
-  listen_for /(licht|rollladen|markise|steckdose) ([a-zäöüA-ZÄÖÜß ]+) (an|aus|[0-9]+ %)/i  do |type,description,value|
-  #Syntaxhighlighting kaputt)
-    response = "parsed: type=" + type + " description=" + description + " value=" + value
+  listen_for /(licht|rollladen|markise|steckdose|stromkreis|beleuchtung|lampe|lampen|lichter) ([a-zäöüß ]+) (auf|zu|öffnen|schließen|abschalten|anschalten|ausschalten|aktivieren|deaktivieren|an|aus|[0-9]+ %)/i  do |type,description,value|  #Syntaxhighlighting kaputt)
+    response = "parsed: type=switch/dimmer/shutter description=" + type + " " + description + " value=" + value
     say response, spoken: ""
     case value.downcase
-      when "an"
+      when "an", "auf", "öffnen", "aktivieren", "anschalten"
         value = "1"
-      when "aus"
+      when "aus", "zu", "schließen", "deaktivieren", "abschalten", "ausschalten"
         value = "0"
       else
         value = value.to_f / 100
@@ -41,10 +41,18 @@ class SiriProxy::Plugin::Homematic < SiriProxy::Plugin
     end
     search = description.downcase.strip
     result = $hm_channels.keys.grep(/#{search}/i)
+    if result.size > 1
+      result2 = $hm_channels.keys.grep(/#{type} #{search}/i) 
+      if result.size2 == 1
+        reusult = result2
+      end
+    end
     if result.size == 1
       response = "found: " + result[0]
       say response, spoken: ""
-      hm_statechange $hm_channels[result[0]], value, "Befehl an Zentrale gesendet.", "Ok."
+      hm_statechange $hm_channels[result[0]], value
+      say "Befehl an Zentrale gesendet.", spoken: "Ok."
+      request_completed
     elsif result.size > 1
       response = ""
       result.each do |channel|
@@ -60,15 +68,16 @@ class SiriProxy::Plugin::Homematic < SiriProxy::Plugin
   end
 
   # Programme ausführen
-  listen_for /automatik ([a-zäöüA-ZÄÖÜß ]+)/i  do |description|
-    response = "parsed: description=" + description
+  listen_for /(automatik|haus) ([a-zäöüß ]+)/i  do |type,description|
+    response = "parsed: type=runprogram description=" + description
     say response, spoken: ""
     search = description.downcase.strip
     result = $hm_programs.keys.grep(/#{search}/i)
     if result.size == 1
       response = "found: " + result[0]
       say response, spoken: ""
-      hm_runprogram $hm_programs[result[0]], "Befehl an Zentrale gesendet.", "Ok."
+      hm_runprogram $hm_programs[result[0]]
+      say "Befehl an Zentrale gesendet.", spoken: "Ok."
     elsif result.size > 1
       response = ""
       result.each do |channel|
@@ -82,6 +91,33 @@ class SiriProxy::Plugin::Homematic < SiriProxy::Plugin
       request_completed
     end
   end
+
+  # Variablen abfragen
+  listen_for /(status) ([a-zäöüß ]+)/i do |type,description|
+    response = "parsed: type=status description=" + description
+    say response, spoken: ""
+    search = description.downcase.strip
+    result = $hm_sysvars.keys.grep(/#{search}/i)
+    if result.size == 1
+      response = "found: " + result[0]
+      say response, spoken: ""
+      response = hm_sysvar_value $hm_sysvars[result[0]]
+      say response.to_s
+      request_completed
+    elsif result.size > 1
+      response = ""
+      result.each do |channel|
+         response = response + channel + ", "
+      end 
+      say "found: " + response, spoken: "" 
+      say description + " nicht eindeutig.", spoken: description + " habe ich mehrfach gefunden."
+      request_completed
+    else
+      say description + " nicht gefunden.", spoken: description + " konnte ich leider nicht finden."
+      request_completed
+    end 
+  end
+
 
   def hm_get_config
     # kann dauern...
@@ -107,31 +143,47 @@ class SiriProxy::Plugin::Homematic < SiriProxy::Plugin
       data['program'].each do |item|
           $hm_programs[item['name']] = item['id']
       end
-      url = @hm_url + "sysvarlist.cgi"
+      url = @hm_url + "sysvarlist.cgi?text=true"
       puts "[Info - Plugin Homematic] requesting Sysvars"
       xml_data = Net::HTTP.get_response(URI.parse(url)).body
       puts "[Info - Plugin Homematic] received Sysvars"
       data = XmlSimple.xml_in(xml_data)
       data['systemVariable'].each do |item|
           $hm_sysvars[item['name']] = item['ise_id']
-      end    
+          $hm_valuelist[item['name']] = item['value_list']
+      end
+      puts $hm_sysvars
+      puts $hm_valuelist
     end
   end
 
-  def hm_statechange(id, value, text="Ok.", voice="")
+  def hm_statechange(id, value)
     url = @hm_url + "statechange.cgi?ise_id=" + id + "&new_value=" + value
     say "command: statechange ise_id=" + id + " new_value=" + value, spoken: ""
     result = Net::HTTP.get_response(URI.parse(url)).body
-    say text, spoken: voice
-    request_completed
   end
 
-  def hm_runprogram(id, text="Ok.", voice="")
+  def hm_sysvar_value(id)
+    url = @hm_url + "sysvar.cgi?ise_id=" + id
+    say "command: sysvar ise_id=" + id, spoken: ""
+    xml_data = Net::HTTP.get_response(URI.parse(url)).body
+    data = XmlSimple.xml_in(xml_data)
+    puts data
+    puts data['systemVariable'][0]
+    if data['systemVariable'][0]['value_text'] != ""
+      result = data['systemVariable'][0]['value_text']
+    else 
+      result = data['systemVariable'][0]['value']
+    end
+    response = "result: value=" + result
+    say response, spoken: ""
+    return result
+  end
+
+  def hm_runprogram(id)
     url = @hm_url + "runprogram.cgi?ise_id=" + id
-    say url, spoken: ""
+    say "command: runprogram ise_id=" + id, spoken: ""
     result = Net::HTTP.get_response(URI.parse(url)).body
-    say text, spoken: voice
-    request_completed
   end
 
 end
