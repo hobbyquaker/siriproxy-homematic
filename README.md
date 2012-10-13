@@ -6,10 +6,10 @@ Mit diesem Plugin können Homematic Dimm-, Schalt-, und Rollladen-Aktoren über 
 
 ###Befehle
 #### Aktoren steuern
-**Siri:** [Licht,Lampe,Beleuchtung,Steckdose,Stromkreis] *(Bezeichner)* *(0-100)* Prozent     
-**Siri:** [Licht,Lampe,Beleuchtung,Steckdose,Stromkreis] *(Bezeichner)* [an|aus|anschalten|ausschalten|abschalten]   
-**Siri:** [Rolladen] *(Bezeichner)* *(0-100)* Prozent    
-**Siri:** [Rolladen] *(Bezeichner)* [auf|zu|öffnen|schließen]    
+**Siri:** [Licht|Lampe|Beleuchtung|Steckdose|Stromkreis] *(Bezeichner)* *(0-100)* Prozent     
+**Siri:** [Licht|Lampe|Beleuchtung|Steckdose|Stromkreis] *(Bezeichner)* [an|aus|anschalten|ausschalten|abschalten]   
+**Siri:** [Rolladen|Markise] *(Bezeichner)* *(0-100)* Prozent    
+**Siri:** [Rolladen|Markise] *(Bezeichner)* [auf|zu|öffnen|schließen]    
 #### Variablen abfragen
 **Siri:** Status *(Bezeichner)*
 #### Programme starten
