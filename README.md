@@ -1,5 +1,7 @@
 #Siriproxy Homematic Plugin Version 0.2
 
+#Dieses Plugin wird mangels iOS7-kompatiblem Siriproxy mehr weiterentwickelt. Sobald es einen iOS7 fähigen Siriproxy gibt wird ein Nachfolgeprojekt gestartet: ein Siriproxy-Adapter für CCU.IO http://ccu.io
+
 Ein kleines Demo-Video: http://www.youtube.com/watch?v=PRAo6GPoI2Y
 
 Mit diesem Plugin können Homematic Dimm-, Schalt-, und Rollladen-Aktoren über Siri gesteuert werden. Auch Programme starten und Systemvariablen lesen ist möglich. Das Plugin liest die Bezeichner der Kanäle, Variablen und Programme aus der CCU aus, daher muss ausser der CCU-IP keine weitere Konfiguration vorgenommen werden. Siehe auch diesen Forums-Thread: http://homematic-forum.de/forum/viewtopic.php?f=31&t=10237
