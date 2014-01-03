@@ -1,6 +1,6 @@
 #Siriproxy Homematic Plugin Version 0.2
 
-#Dieses Plugin wird mangels iOS7-kompatiblem Siriproxy mehr weiterentwickelt. Sobald es einen iOS7 fähigen Siriproxy gibt wird ein Nachfolgeprojekt gestartet: ein Siriproxy-Adapter für CCU.IO http://ccu.io
+#Dieses Plugin wird mangels iOS7-kompatiblem Siriproxy nicht mehr weiterentwickelt. Sobald es einen iOS7 fähigen Siriproxy gibt wird ein Nachfolgeprojekt gestartet: ein Siriproxy-Adapter für CCU.IO http://ccu.io
 
 Ein kleines Demo-Video: http://www.youtube.com/watch?v=PRAo6GPoI2Y
 
